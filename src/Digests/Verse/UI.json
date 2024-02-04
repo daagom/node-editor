@@ -1,0 +1,187 @@
+{
+  "id": "UI",
+  "type": "module",
+  "public": true,
+  "classes": [
+    {
+      "id": "text_button_base",
+      "type": "class",
+      "native": true,
+      "public": true,
+      "abstract": true,
+      "epic_internal": true,
+      "inherits": "widget",
+      "properties": [
+        {
+          "id": "DefaultText",
+          "type": "message",
+          "localizes": true,
+          "native": true,
+          "public": true
+        }
+      ],
+      "nodes": [
+        {
+          "id": "OnClickNode",
+          "type": "OnClick",
+          "label": "OnClick",
+          "description": "",
+          "inputs": [],
+          "outputs": [
+            {
+              "id": "widget_messageOutput",
+              "type": "listenable"
+            }
+          ]
+        },
+        {
+          "id": "SetTextNode",
+          "type": "SetText",
+          "label": "SetText",
+          "description": "",
+          "inputs": [
+            {
+              "id": "InText",
+              "type": "message"
+            }
+          ],
+          "outputs": []
+        },
+        {
+          "id": "GetTextNode",
+          "type": "GetText",
+          "label": "GetText",
+          "description": "",
+          "inputs": [],
+          "outputs": [
+            {
+              "id": "charOutput",
+              "type": "array"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "button_loud",
+      "type": "class",
+      "native": true,
+      "public": true,
+      "final": true,
+      "inherits": "text_button_base"
+    },
+    {
+      "id": "button_regular",
+      "type": "class",
+      "native": true,
+      "public": true,
+      "final": true,
+      "inherits": "text_button_base"
+    },
+    {
+      "id": "button_quiet",
+      "type": "class",
+      "native": true,
+      "public": true,
+      "final": true,
+      "inherits": "text_button_base"
+    }
+  ],
+  "functions": [
+    {
+      "id": "ShowHUDElements",
+      "deprecated": true,
+      "parameters": [
+        {
+          "name": "HUDElements",
+          "type": "array",
+          "elements": "hud_element_identifier"
+        }
+      ],
+      "returns": "void"
+    },
+    {
+      "id": "HideHUDElements",
+      "deprecated": true,
+      "parameters": [
+        {
+          "name": "HUDElements",
+          "type": "array",
+          "elements": "hud_element_identifier"
+        }
+      ],
+      "returns": "void"
+    },
+    {
+      "id": "ResetHUDElementVisibility",
+      "deprecated": true,
+      "parameters": [
+        {
+          "name": "HUDElements",
+          "type": "array",
+          "elements": "hud_element_identifier"
+        }
+      ],
+      "returns": "void"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "fort_hud_controller",
+      "type": "interface",
+      "native": true,
+      "public": true,
+      "methods": [
+        {
+          "id": "ShowElementsNode",
+          "type": "ShowElements",
+          "label": "ShowElements",
+          "description": "",
+          "inputs": [
+            {
+              "id": "HUDElements",
+              "type": "array"
+            }
+          ],
+          "outputs": []
+        },
+        {
+          "id": "HideElementsNode",
+          "type": "HideElements",
+          "label": "HideElements",
+          "description": "",
+          "inputs": [
+            {
+              "id": "HUDElements",
+              "type": "array"
+            }
+          ],
+          "outputs": []
+        },
+        {
+          "id": "ResetElementVisibilityNode",
+          "type": "ResetElementVisibility",
+          "label": "ResetElementVisibility",
+          "description": "",
+          "inputs": [
+            {
+              "id": "HUDElements",
+              "type": "array"
+            }
+          ],
+          "outputs": []
+        }
+      ]
+    }
+  ],
+  "external_functions": [
+    {
+      "id": "GetHUDController",
+      "associated_with": "fort_playspace",
+      "returns": {
+        "type": "object",
+        "id": "fort_hud_controller"
+      }
+    }
+  ]
+}
