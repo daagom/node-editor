@@ -26,10 +26,11 @@ function NodeMenu({ position, onClose, onNodeSelect }) {
     top: `${position.y}px`,
     left: `${position.x}px`,
     zIndex: 1000,
-    backgroundColor: "white",
+    backgroundColor: "#303030",
     border: "1px solid black",
-    borderRadius: "5px",
+    borderRadius: "2px",
     padding: "10px",
+    textAlign: "left",
     // Additional styles
   };
 
@@ -40,7 +41,7 @@ function NodeMenu({ position, onClose, onNodeSelect }) {
         placeholder="Search nodes..."
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        style={{ width: "100%", marginBottom: "10px" }}
+        style={{ width: "90%", marginBottom: "10px" }}
       />
       <div style={{ maxHeight: "200px", overflowY: "auto" }}>
         <ul>

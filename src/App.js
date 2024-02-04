@@ -9,7 +9,7 @@ import "reactflow/dist/style.css";
 import "./styles.css";
 
 export default function App() {
-  const [showPropertyPanel, setShowPropertyPanel] = useState(true);
+  const [showPropertyPanel, setShowPropertyPanel] = useState(false);
 
   const togglePropertyPanel = () => {
     setShowPropertyPanel(!showPropertyPanel);

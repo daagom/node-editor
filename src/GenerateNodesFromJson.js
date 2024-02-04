@@ -40,6 +40,10 @@ export function allCategories() {
     { name: "Operators", nodes: operators },
   ];
 }
+
+export function getAllNodes() {
+  return [...conditionals, ...operators]
+}
 /*
 var users = [
   { 'user': 'barney' },

@@ -13,7 +13,7 @@ export const nodes = [
         id: "notOperator",
         type: "not",
         label: "Not Operator",
-        inputs: [{ id: "operand", type: "expression" }],
+        inputs: [{ id: "operand", type: "logic" }],
         outputs: [{ id: "result", type: "logic" }],
         operatorFormat: "prefix"
       },

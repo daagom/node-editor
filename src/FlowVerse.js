@@ -17,6 +17,12 @@ import DataNode from "./NodeTypes/DataNode";
 import FunctionNode from "./NodeTypes/FunctionNode";
 import ValueNode from "./NodeTypes/ValueNode";
 import GeneratedFunctionNode from "./NodeTypes/GeneratedNode";
+import {
+  allCategories,
+  GetNodeFromNodeType,
+  GetAllNodeTypes,
+  getAllNodes,
+} from "./GenerateNodesFromJson";
 
 const nodeTypes = {
   sourceNode: SourceNode,
@@ -29,8 +35,13 @@ const nodeTypes = {
 import { nodes as conditionals } from "./Nodes/Conditionals.js";
 import { nodes as operators } from "./Nodes/Operators.js";
 
+
+
+
 const onInit = (reactFlowInstance) =>
   console.log("flow loaded:", reactFlowInstance);
+
+const allNodes = getAllNodes();
 
 const HorizontalFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -75,7 +86,7 @@ const HorizontalFlow = () => {
 
   const addNewNode = (nodeType) => {
     const node_id = nanoid();
-    const node_data = conditionals.filter((node) => node.type === nodeType)[0];
+    const node_data = allNodes.filter((node) => node.type === nodeType)[0];
     console.log("addNewNode", node_data);
 
     const newNode = {
@@ -121,7 +132,8 @@ const HorizontalFlow = () => {
         }}
       />
       <Controls />
-      <Background color="#aaa" gap={16} />
+      <Background id={1} color="#2c2c2c" gap={10} lineWidth={1} variant="Lines" />
+      <Background id={2} color="#0c0c0c" gap={100} lineWidth={1} variant="Lines" />
       {showNodeMenu && (
         <NodeMenu
           position={nodeMenuPosition}

@@ -3,20 +3,26 @@ export const nodes = [
       id: "ifElseNode",
       type: "ifElse",
       label: "If-Else Condition",
-      inputs: [{ id: "cond", type: "boolean" }],
+      inputs: [
+        { id: "flow", type: "flow" },
+        { id: "Condition", type: "logic" }
+      ],
       outputs: [
-        { id: "then", type: "flow" },
-        { id: "else", type: "flow" },
+        { id: "True", type: "flow" },
+        { id: "False", type: "flow" },
       ],
     },
     {
       id: "forNode",
       type: "for",
       label: "For Loop",
-      inputs: [{ id: "range", type: "range" }],
+      inputs: [
+        { id: "flow", type: "flow" },
+        { id: "range", type: "range" }
+      ],
       outputs: [
-        { id: "body", type: "flow" },
-        { id: "exit", type: "flow" },
+        { id: "Loop", type: "flow" },
+        { id: "Completed", type: "flow" },
       ],
     },
     {

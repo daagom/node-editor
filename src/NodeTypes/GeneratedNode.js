@@ -1,77 +1,131 @@
 import React, { memo } from "react";
-import { Handle } from "reactflow";
+import { Handle, Position } from "reactflow";
 import Node, { contentStyle as style } from "./Node";
 import { nanoid } from "nanoid";
+import {FontAwesomeIcon} from "@fortawesome/fontawesome-free";
+
+
+import {dataStyles} from "./node-styles"
 
 const isValidInput = (connection, type) => {
-  console.log(connection.source);
-  return connection.source === type;
+  return connection.sourceHandle.endsWith(type);
 };
 const isValidOutput = (connection, type) => {
-  console.log(connection.source);
-  return connection.target === type;
+  return connection.targetHandle.endsWith(type);
 };
 
 const GeneratedFunctionNode = ({ data, selected }) => {
   const node_id = nanoid();
-  console.log("GeneratedFunctionNode", data);
+
+  const labelStyle = (label, datatype, type) => {
+    const itemCounter = (array, item) => {
+      return array.filter((currentItem) => currentItem.id == item).length;
+    };
+
+    if(type == "input" & itemCounter(data.inputs, "flow") > 1) { return label }
+    if(type == "output" & itemCounter(data.outputs, "flow") > 1) { return label }
+
+    switch(label) {
+      case "flow":
+        return ""
+      default:
+        if(type=="input") 
+          return handleWidget(label, datatype)
+        else
+          return label
+    }
+  };
+
+  const handleWidget = (label, type) => {
+    console.log(type);
+
+    switch(type) {
+      case "logic":
+        return (
+          <div class="input-container">
+            {label} 
+            <input type="checkbox"/>
+            <span class="checkmark"></span>
+          </div>
+        )
+      case "int":
+        return (
+          <div>
+          <input type="number" placeholder="1"/>
+          </div>
+        )
+      case "float":
+        return (
+          <div>
+          <input type="number" placeholder="1.0" step="0.01"/>
+          </div>
+        )
+      case "string":
+        return (
+          <div>
+          <input type="text"/>
+          </div>
+        )
+      default:
+        return label
+    }
+  };
+
 
   return (
     <Node
       label={data.label}
       selected={selected}
-      color={(data) => {
-        switch (data.type) {
-          case "valueNode":
-            return "LightGreen";
-          case "dataNode":
-            return "LightBlue";
-          case "functionNode":
-            return "Lavender";
-          case "sourceNode":
-            return "Gold";
-          default:
-            return "#eee";
-        }
-      }}
+      color={dataStyles[data.type]}
+
       content={
         <>
-          <div style={style.contentHeader}>{"Inputs"}</div>
+          <div key={"i-" + node_id} className="inputs">
           {data.inputs.map((input) => (
             <div
               key={"i-" + input.id}
-              style={{ ...style.io, ...style.textLeft }}
+              className="handle"
+              //style={{ ...style.io, ...style.textLeft }}
             >
-              {input.id}
+              <div className="left-text">
+              {labelStyle(input.id, input.type, "input")}
+              </div>
+              
               <Handle
                 type="target"
-                position="left"
-                id={"i-" + input.id}
-                style={{ ...style.handle, ...style.left }}
+                position={Position.Left}
+                id={input.id + "___" + input.type}
+                style={{ ...dataStyles[input.type] }}
+                //style={{ ...style.handle, ...style.left, ...dataStyles[input.type] }}
                 isValidConnection={(connection) =>
                   isValidInput(connection, input.type)
                 }
               />
             </div>
           ))}
-          <div style={style.contentHeader}>{"Outputs"}</div>
+          </div>
+          <div key={"0-" + node_id} class="outputs">
           {data.outputs.map((output) => (
             <div
               key={"o-" + output.id}
-              style={{ ...style.io, ...style.textRight }}
+              className="handle"
+              //style={{ ...style.io, ...style.textRight }}
             >
-              {output.id}
+              <div className="right-text">
+              {labelStyle(output.id, "output")}
+              </div>
               <Handle
                 type="source"
-                position="right"
-                id={"o-" + output.id + "__" + output.type}
-                style={{ ...style.handle, ...style.right }}
+                position={Position.Right}
+                id={output.id + "___" + output.type}
+                style={{ ...dataStyles[output.type] }}
                 isValidConnection={(connection) =>
                   isValidOutput(connection, output.type)
                 }
               />
             </div>
           ))}
+          </div>
         </>
       }
     />
