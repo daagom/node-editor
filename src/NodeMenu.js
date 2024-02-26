@@ -5,7 +5,7 @@ import {
   allCategories,
   GetNodeFromNodeType,
   GetAllNodeTypes,
-} from "./GenerateNodesFromJson";
+} from "./PopulateNodeTypes";
 
 function NodeMenu({ position, onClose, onNodeSelect }) {
   const [searchQuery, setSearchQuery] = useState("");

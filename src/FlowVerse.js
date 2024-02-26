@@ -10,6 +10,7 @@ import ReactFlow, {
 } from "reactflow";
 import { nanoid } from "nanoid";
 
+// Components
 import NodeMenu from "./NodeMenu";
 
 import SourceNode from "./NodeTypes/SourceNode";
@@ -22,7 +23,7 @@ import {
   GetNodeFromNodeType,
   GetAllNodeTypes,
   getAllNodes,
-} from "./GenerateNodesFromJson";
+} from "./PopulateNodeTypes";
 
 const nodeTypes = {
   sourceNode: SourceNode,

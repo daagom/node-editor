@@ -3,6 +3,18 @@ import React, { memo } from "react";
 import { nodes as conditionals } from "./Nodes/Conditionals.js";
 import { nodes as operators } from "./Nodes/Operators.js";
 
+export function getAllDataTypes() {
+  // TODO: add all data types from digest modules
+  return [
+    'logic',
+    'int',
+    'float',
+    'string',
+    'rational',
+    'any',
+  ]
+}
+
 export function createNewNode(nodeType) {
   for (var key in conditionals) {
     var node = conditionals[key];
