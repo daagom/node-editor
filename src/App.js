@@ -2,6 +2,8 @@ import React, { useState } from "react";
 
 import Flow from "./FlowVerse";
 import PropertyPanel from "./PropertyPanel";
+import { VariableProvider } from './Contexts/VariableContext';
+
 import "reactflow/dist/style.css";
 import "./styles.css";
 
@@ -14,8 +16,10 @@ export default function App() {
 
   return (
     <div className="App">
-      <Flow />
-      <PropertyPanel show={showPropertyPanel} onToggle={togglePropertyPanel} />
+      <VariableProvider>
+        <Flow />
+        <PropertyPanel show={showPropertyPanel} onToggle={togglePropertyPanel} />
+      </VariableProvider>
     </div>
   );
 }

@@ -47,8 +47,9 @@ const allNodes = getAllNodes();
 const HorizontalFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
-  const ref = useRef(null);
-
+  const reactFlowWrapper = useRef(null);
+  const [reactFlowInstance, setReactFlowInstance] = useState(null);
+  
   const onConnect = useCallback(
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges],
@@ -100,9 +101,84 @@ const HorizontalFlow = () => {
     closeNodeMenu();
   };
 
+  // Handlers for drag & drop
+  const onDragOver = useCallback((event) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  }, []);
+
+  // TODO: update to support Getters and Setters
+  const onDrop = useCallback((event) => {
+    event.preventDefault();
+
+    const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+    const dataType = JSON.parse(event.dataTransfer.getData('variable'));
+
+    console.log("variable dropped:", dataType);
+
+    // Calculate position of the new node
+    const position = reactFlowInstance.project({
+      x: event.clientX - reactFlowBounds.left,
+      y: event.clientY - reactFlowBounds.top,
+    });
+
+    const node_data_getter = ({
+      id: (dataType.id+'_get'),
+      label: ('Get ' + dataType.name),
+      type: dataType.type,
+      outputs: [{ id: "result", type: dataType.type }],
+    });
+
+    const node_data_setter = ({
+      id: (dataType.id+'_set'),
+      label: ('Set ' + dataType.name),
+      type: dataType.type,
+      inputs: [
+        { id: "flow", type: "flow"},
+        { id: "value", type: dataType.type }],
+      outputs: [{ id: "flow", type: "flow"}]
+    });
+
+    console.log("variable dropped:", node_data_getter);
+    console.log("variable dropped:", node_data_setter);
+    /* 
+          TODO: update to use the above newNode function.
+          Generate correct node_data to pass 
+            {
+    id: "ifElseNode",
+    type: "ifElse",
+    label: "If-Else Condition",
+    inputs: [{ id: "cond", type: "boolean" }],
+    outputs: [
+      { id: "then", type: "flow" },
+      { id: "else", type: "flow" },
+    ],
+  },
+    */
+    // Generate a new node
+    const get_node = {
+      id: nanoid(),
+      type: 'generatedFunctionNode', // Assuming you want this type, change as needed
+      position: position,
+      data: node_data_getter,
+    };
+    const set_node = {
+      id: nanoid(),
+      type: 'generatedFunctionNode', // Assuming you want this type, change as needed
+      position: position,
+      data: node_data_setter,
+    };
+
+    
+    setNodes((nodes) => nodes.concat(get_node));
+    setNodes((nodes) => nodes.concat(set_node));
+  }, [reactFlowInstance, setNodes]);
+
   return (
+
+    <div ref={reactFlowWrapper} style={{ height: "100%" }}>
     <ReactFlow
-      ref={ref}
+      //ref={ref}
       nodes={nodes}
       edges={edges}
       nodeTypes={nodeTypes}
@@ -112,7 +188,9 @@ const HorizontalFlow = () => {
       //onNodeContextMenu={onNodeContextMenu}
       onPaneClick={closeNodeMenu}
       onConnect={onConnect}
-      onInit={onInit}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+      onInit={setReactFlowInstance}
       fitView
       attributionPosition="top-right"
     >
@@ -143,6 +221,7 @@ const HorizontalFlow = () => {
         />
       )}
     </ReactFlow>
+    </div>
   );
 };
 

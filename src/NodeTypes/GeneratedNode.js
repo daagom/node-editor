@@ -19,7 +19,10 @@ const GeneratedFunctionNode = ({ data, selected }) => {
 
   const labelStyle = (label, datatype, type) => {
     const itemCounter = (array, item) => {
-      return array.filter((currentItem) => currentItem.id == item).length;
+      if(array?.length) {
+        return array.filter((currentItem) => currentItem.id == item).length;
+      }
+      return 0
     };
 
     if(type == "input" & itemCounter(data.inputs, "flow") > 1) { return label }
@@ -37,8 +40,6 @@ const GeneratedFunctionNode = ({ data, selected }) => {
   };
 
   const handleWidget = (label, type) => {
-    console.log(type);
-
     switch(type) {
       case "logic":
         return (
@@ -81,7 +82,7 @@ const GeneratedFunctionNode = ({ data, selected }) => {
       content={
         <>
           <div key={"i-" + node_id} className="inputs">
-          {data.inputs.map((input) => (
+          {data.inputs?.map(input => (
             <div
               key={"i-" + input.id}
               className="handle"
@@ -105,7 +106,7 @@ const GeneratedFunctionNode = ({ data, selected }) => {
           ))}
           </div>
           <div key={"0-" + node_id} class="outputs">
-          {data.outputs.map((output) => (
+          {data.outputs?.map(output => (
             <div
               key={"o-" + output.id}
               className="handle"
@@ -133,27 +134,3 @@ const GeneratedFunctionNode = ({ data, selected }) => {
 };
 
 export default memo(GeneratedFunctionNode);
-
-function createHierarchicalScrollList(items) {
-  // Create a list element.
-  const list = document.createElement("ul");
-
-  // Iterate over the items and create a list item for each one.
-  for (const item of items) {
-    const listItem = document.createElement("li");
-
-    // If the item has children, create a nested scroll list for them.
-    if (item.children) {
-      listItem.appendChild(createHierarchicalScrollList(item.children));
-    } else {
-      // If the item does not have children, create a text node for it.
-      listItem.appendChild(document.createTextNode(item.text));
-    }
-
-    // Append the list item to the list.
-    list.appendChild(listItem);
-  }
-
-  // Return the list element.
-  return list;
-}
