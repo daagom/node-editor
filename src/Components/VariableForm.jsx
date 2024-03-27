@@ -1,6 +1,7 @@
 // VariableForm.jsx
 import React, { useState } from 'react';
 import { useVariables } from '../Contexts/VariableContext';
+import { getAllDataTypes, registerVariableNodes, deregisterVariableNodes } from '../PopulateNodeTypes';
 
 function VariableForm() {
   const [variableName, setVariableName] = useState('');
@@ -20,6 +21,8 @@ function VariableForm() {
     setVariableValue('');
   };
 
+  const dataTypes = getAllDataTypes()
+
   return (
     <div className="variable-form">
       <input
@@ -32,10 +35,9 @@ function VariableForm() {
         value={variableType}
         onChange={(e) => setVariableType(e.target.value)}
       >
-        <option value="string">String</option>
-        <option value="number">Number</option>
-        <option value="boolean">Boolean</option>
-        {/* Add more types as needed */}
+        {dataTypes.map(type => (
+            <option key={type} value={type}>{type.charAt(0).toUpperCase() + type.substring(1)}</option>
+        ))}
       </select>
       <input
         type="text"

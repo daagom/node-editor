@@ -1,6 +1,8 @@
 // VariableContext.jsx
 import React, { createContext, useState, useContext } from 'react';
 
+import { registerVariableNodes, deregisterVariableNodes } from '../PopulateNodeTypes';
+
 const VariableContext = createContext();
 
 export function useVariables() {
@@ -12,10 +14,12 @@ export const VariableProvider = ({ children }) => {
 
   const createVariable = (variable) => {
     setVariables([...variables, variable]);
+    registerVariableNodes(variable);
   };
 
   const removeVariable = (variableId) => {
     setVariables(variables.filter(variable => variable.id !== variableId));
+    deregisterVariableNodes(variableId);
   };
 
   const modifyVariable = (modifiedVariable) => {

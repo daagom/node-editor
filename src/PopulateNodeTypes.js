@@ -1,7 +1,51 @@
 import React, { memo } from "react";
+import { nanoid } from "nanoid";
 
 import { nodes as conditionals } from "./Nodes/Conditionals.js";
 import { nodes as operators } from "./Nodes/Operators.js";
+
+const nodeAlias = {
+    id: "",
+    type: "",
+    label: "",
+    inputs: [
+      { id: "", type: "" }
+    ],
+    outputs: [
+      { id: "", type: "" },
+    ],
+};
+
+var userGenVariables = []
+
+export function registerVariableNodes(dataType) {
+  const node_data_getter = ({
+    id: (dataType.id+'_get'),
+    label: ('Get ' + dataType.name),
+    type: (dataType.id+'_get'),
+    outputs: [{ id: "result", type: dataType.type }],
+  });
+
+  const node_data_setter = ({
+    id: (dataType.id+'_set'),
+    label: ('Set ' + dataType.name),
+    type: (dataType.id+'_set'),
+    inputs: [
+      { id: "flow", type: "flow"},
+      { id: "value", type: dataType.type }],
+    outputs: [{ id: "flow", type: "flow"}]
+  });
+
+  userGenVariables = userGenVariables.concat(node_data_getter, node_data_setter)
+}
+
+export function deregisterVariableNodes(node_id) {
+  userGenVariables = userGenVariables.map(node => node.id.contains(node_id) === false )
+}
+
+export function modifyVariableNode(node_id) {
+  /* TODO: update existing nodes with new names */
+}
 
 export function getAllDataTypes() {
   // TODO: add all data types from digest modules
@@ -50,11 +94,12 @@ export function allCategories() {
   return [
     { name: "Logical Flow", nodes: conditionals },
     { name: "Operators", nodes: operators },
+    { name: "Variables", nodes: userGenVariables },
   ];
 }
 
 export function getAllNodes() {
-  return [...conditionals, ...operators]
+  return [...conditionals, ...operators, ...userGenVariables]
 }
 /*
 var users = [

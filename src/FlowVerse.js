@@ -12,37 +12,12 @@ import { nanoid } from "nanoid";
 
 // Components
 import NodeMenu from "./NodeMenu";
-
-import SourceNode from "./NodeTypes/SourceNode";
-import DataNode from "./NodeTypes/DataNode";
-import FunctionNode from "./NodeTypes/FunctionNode";
-import ValueNode from "./NodeTypes/ValueNode";
 import GeneratedFunctionNode from "./NodeTypes/GeneratedNode";
-import {
-  allCategories,
-  GetNodeFromNodeType,
-  GetAllNodeTypes,
-  getAllNodes,
-} from "./PopulateNodeTypes";
+import { getAllNodes } from "./PopulateNodeTypes";
 
 const nodeTypes = {
-  sourceNode: SourceNode,
-  dataNode: DataNode,
-  functionNode: FunctionNode,
-  valueNode: ValueNode,
   generatedFunctionNode: GeneratedFunctionNode,
 };
-
-import { nodes as conditionals } from "./Nodes/Conditionals.js";
-import { nodes as operators } from "./Nodes/Operators.js";
-
-
-
-
-const onInit = (reactFlowInstance) =>
-  console.log("flow loaded:", reactFlowInstance);
-
-const allNodes = getAllNodes();
 
 const HorizontalFlow = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
@@ -87,6 +62,7 @@ const HorizontalFlow = () => {
   };
 
   const addNewNode = (nodeType) => {
+    const allNodes = getAllNodes();
     const node_id = nanoid();
     const node_data = allNodes.filter((node) => node.type === nodeType)[0];
     console.log("addNewNode", node_data);
@@ -111,68 +87,13 @@ const HorizontalFlow = () => {
   const onDrop = useCallback((event) => {
     event.preventDefault();
 
-    const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
     const dataType = JSON.parse(event.dataTransfer.getData('variable'));
 
     console.log("variable dropped:", dataType);
 
-    // Calculate position of the new node
-    const position = reactFlowInstance.project({
-      x: event.clientX - reactFlowBounds.left,
-      y: event.clientY - reactFlowBounds.top,
-    });
-
-    const node_data_getter = ({
-      id: (dataType.id+'_get'),
-      label: ('Get ' + dataType.name),
-      type: dataType.type,
-      outputs: [{ id: "result", type: dataType.type }],
-    });
-
-    const node_data_setter = ({
-      id: (dataType.id+'_set'),
-      label: ('Set ' + dataType.name),
-      type: dataType.type,
-      inputs: [
-        { id: "flow", type: "flow"},
-        { id: "value", type: dataType.type }],
-      outputs: [{ id: "flow", type: "flow"}]
-    });
-
-    console.log("variable dropped:", node_data_getter);
-    console.log("variable dropped:", node_data_setter);
-    /* 
-          TODO: update to use the above newNode function.
-          Generate correct node_data to pass 
-            {
-    id: "ifElseNode",
-    type: "ifElse",
-    label: "If-Else Condition",
-    inputs: [{ id: "cond", type: "boolean" }],
-    outputs: [
-      { id: "then", type: "flow" },
-      { id: "else", type: "flow" },
-    ],
-  },
-    */
-    // Generate a new node
-    const get_node = {
-      id: nanoid(),
-      type: 'generatedFunctionNode', // Assuming you want this type, change as needed
-      position: position,
-      data: node_data_getter,
-    };
-    const set_node = {
-      id: nanoid(),
-      type: 'generatedFunctionNode', // Assuming you want this type, change as needed
-      position: position,
-      data: node_data_setter,
-    };
-
-    
-    setNodes((nodes) => nodes.concat(get_node));
-    setNodes((nodes) => nodes.concat(set_node));
-  }, [reactFlowInstance, setNodes]);
+    addNewNode(dataType.id+'_get')
+    addNewNode(dataType.id+'_set')
+  });
 
   return (
 
